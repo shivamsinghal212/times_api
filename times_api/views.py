@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from django.http import HttpResponse, Http404
+# from django.shortcuts import render
+from django.http import Http404
 from .models import Category
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -7,7 +7,6 @@ from .serializers import CategorySerializer
 from django.core.exceptions import FieldError
 from rest_framework import status
 from .tasks import send_email
-from datetime import datetime, timedelta
 
 
 # Create your views here.
