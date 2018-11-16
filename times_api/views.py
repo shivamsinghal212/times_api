@@ -80,7 +80,7 @@ class CategoryList(APIView):
         serializer = CategorySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            send_email.apply_async(('shivam.singhal212@gmail.com', serializer.data), countdown=900)
+            send_email.apply_async(('shivam.singhal212@gmail.com', serializer.data), countdown=10)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -112,5 +112,3 @@ class CategoryList(APIView):
                 return Response({'msg': str(deleted_data)+' records deleted'})
         else:
             return Response({'msg':'Enter data to be deleted.'})
-
-
