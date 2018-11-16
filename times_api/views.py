@@ -84,3 +84,34 @@ class CategoryList(APIView):
             send_email.apply_async(('shivam.singhal212@gmail.com', serializer.data), countdown=900)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request):
+        if 'id' not in request.data:
+            return Response({'error':'"id" field missing.'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            try:
+                result = Category.objects.filter(id=int(request.data['id']))
+                if not result:
+                    return Response({'error': 'ID does not exist'})
+                else:
+                    result.update(**request.data)
+            except ValueError:
+                return Response({'error':'ID should be in integer.'})
+
+            updated_result = Category.objects.filter(id=int(request.data['id']))
+            serializer = CategorySerializer(updated_result, many=True)
+            return Response({'data':serializer.data, 'updated':True}, status=status.HTTP_201_CREATED)
+
+    def delete(self,request):
+        if len(request.data)!=0:
+            result = Category.objects.filter(**request.data)
+            deleted_data = len(result)
+            if not result:
+                return Response({'msg': 'Data not found.'})
+            else:
+                result.delete()
+                return Response({'msg': str(deleted_data)+' records deleted'})
+        else:
+            return Response({'msg':'Enter data to be deleted.'})
+
+
